@@ -27,7 +27,6 @@ const userSchema = new mongoose.Schema({
 	},
 	lastLogin: {
 		type: Date,
-		default: Date.now(),
 	},
 });
 
