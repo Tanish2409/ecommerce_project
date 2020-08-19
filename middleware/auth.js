@@ -19,7 +19,6 @@ exports.authMiddleware = async (req, res, next) => {
 			});
 		}
 
-		req.user = user;
 		next();
 	} catch (error) {
 		console.error(error);
@@ -42,7 +41,6 @@ exports.vendorMiddleware = async (req, res, next) => {
 			});
 		}
 
-		req.user = user;
 		next();
 	} catch (error) {
 		console.error(error);
@@ -65,7 +63,6 @@ exports.adminMiddleware = async (req, res, next) => {
 			});
 		}
 
-		res.user = user;
 		next();
 	} catch (error) {
 		console.error(error);

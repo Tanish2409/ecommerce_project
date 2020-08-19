@@ -1,18 +1,15 @@
 const router = require('express').Router();
 const User = require('../models/User');
+const Product = require('../models/Product');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 //middlewares and validators
-const {
-	requireSignin,
-	authMiddleware,
-	adminMiddleware,
-	vendorMiddleware,
-} = require('../middleware/auth');
+const { requireSignin, adminMiddleware } = require('../middleware/auth');
 const {
 	userSigninValidator,
 	userSignupValidator,
 	userUpdateValidator,
+	userCreateValidator,
 } = require('../validators/user');
 const { runValidation } = require('../validators/');
 
@@ -46,7 +43,7 @@ router.post('/signup', userSignupValidator, runValidation, async (req, res) => {
 			lastLogin: Date.now(),
 		});
 		//save the user in db
-		await user.save();
+		user = await user.save();
 
 		//generate token
 		const token = await jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
@@ -111,32 +108,46 @@ router.post('/login', userSigninValidator, runValidation, async (req, res) => {
  * AUTH : Private - only for admins
  */
 
-router.post('/user', requireSignin, adminMiddleware, async (req, res) => {
-	const { name, email, bio, status, password, type } = req.body;
+router.post(
+	'/user',
+	requireSignin,
+	adminMiddleware,
+	userCreateValidator,
+	runValidation,
+	async (req, res) => {
+		const { name, email, bio, status, password, type } = req.body;
 
-	try {
-		//check if user already exists
-		let user = await User.findOne({ email });
-		if (user) {
-			return res.status(400).json({
-				error: 'User already exists',
+		try {
+			//check if user already exists
+			let user = await User.findOne({ email });
+			if (user) {
+				return res.status(400).json({
+					error: 'User already exists',
+				});
+			}
+			//hash password
+			const hashPassword = await bcrypt.hash(password, 10);
+			//create a new user
+			user = new User({
+				name,
+				email,
+				bio,
+				status,
+				password: hashPassword,
+				type,
+			});
+			//save the user in db
+			await user.save();
+
+			return res.json({ message: 'User created successfully.' });
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({
+				error: 'Something went wrong. Please try again !',
 			});
 		}
-		//hash password
-		const hashPassword = await bcrypt.hash(password, 10);
-		//create a new user
-		user = new User({ name, email, bio, status, password: hashPassword, type });
-		//save the user in db
-		await user.save();
-
-		return res.json({ message: 'User created successfully.' });
-	} catch (error) {
-		console.log(error);
-		return res.status(500).json({
-			error: 'Something went wrong. Please try again !',
-		});
 	}
-});
+);
 
 /**
  * METHOD : GET
@@ -186,7 +197,7 @@ router.get('/user/:id', requireSignin, adminMiddleware, async (req, res) => {
 /**
  * METHOD : PATCH
  * ROUTE : /api/user/:id
- * DESC : Admin can update all the user details (name, email, type, bio, image ) but not password
+ * DESC : Admin can update all the user details
  * AUTH : Private - only for admins
  **/
 router.patch(
@@ -197,7 +208,7 @@ router.patch(
 	runValidation,
 	async (req, res) => {
 		const userId = req.params.id;
-		const { name, email, type, bio, image, status } = req.body;
+		let { name, email, type, bio, status, password } = req.body;
 
 		try {
 			//check if email already exists if the admin tries to update email
@@ -210,16 +221,18 @@ router.patch(
 						.json({ error: 'User with that email aready exists' });
 				}
 			}
+			//hash the new password
+			password = await bcrypt.hash(password, 10);
 			//update user details
-			let user = await User.findByIdAndUpdate(
+			await User.findByIdAndUpdate(
 				userId,
 				{
-					$set: { name, email, type, bio, image, status },
+					$set: { name, email, type, bio, status, password },
 				},
 				{ new: true, omitUndefined: true }
-			).select('-password');
+			);
 
-			return res.json({ user });
+			return res.json({ message: 'User details updated successfully!' });
 		} catch (error) {
 			console.error(error);
 			return res.status(500).json({
@@ -252,7 +265,16 @@ router.delete('/user/:id', requireSignin, adminMiddleware, async (req, res) => {
 				error: 'Action denied. User is also an admin.',
 			});
 		}
+
+		//check if the user is vendor
+		//then delete that vendor's products
+		if (user.type === 'vendor') {
+			await Product.deleteMany({ postedBy: userId });
+		}
+
+		//Delete the user
 		await User.findByIdAndDelete(userId);
+
 		return res.json({ message: 'User deleted successfully' });
 	} catch (error) {
 		console.error(error);
