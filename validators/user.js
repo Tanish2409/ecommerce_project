@@ -12,3 +12,16 @@ exports.userSigninValidator = [
 	check('email').isEmail().withMessage('Must be a valid Email address'),
 	check('password').not().isEmpty().withMessage('Password is required'),
 ];
+
+exports.userUpdateValidator = [
+	check(['email', 'name', 'type', 'status'])
+		.optional()
+		.trim()
+		.not()
+		.isEmpty()
+		.withMessage('Submited fields must not be empty'),
+	check('email')
+		.optional()
+		.isEmail()
+		.withMessage('Must be a valid email address'),
+];
