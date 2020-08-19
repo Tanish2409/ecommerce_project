@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+//routes
+const userRoutes = require('./routes/user.js');
 
 //Initialize express server
 const app = express();
@@ -22,9 +24,12 @@ mongoose
 app.use(express.json());
 
 //cors
-if (process.enn.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
 	app.use(cors());
 }
+
+//routes middleware
+app.use('/api', userRoutes);
 
 //PORT
 const PORT = 9000 || process.env.PORT;
