@@ -9,6 +9,8 @@ const productSchema = new mongoose.Schema({
 	},
 	status: {
 		type: String,
+		default: 'active',
+		lowercase: true,
 	},
 	price: {
 		type: Number,
@@ -16,18 +18,22 @@ const productSchema = new mongoose.Schema({
 	},
 	quantity: {
 		type: Number,
+		required: true,
 	},
 	postedBy: {
 		type: ObjectId,
 		ref: 'User',
+		required: true,
 	},
 	brand: {
 		type: ObjectId,
 		ref: 'Brand',
+		required: true,
 	},
 	category: {
 		type: ObjectId,
 		ref: 'Category',
+		required: true,
 	},
 });
 

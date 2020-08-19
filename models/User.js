@@ -18,12 +18,15 @@ const userSchema = new mongoose.Schema({
 	type: {
 		type: String,
 		default: 'user',
+		lowercase: true,
 	},
 	bio: {
 		type: String,
 	},
 	status: {
 		type: String,
+		default: 'active',
+		lowercase: true,
 	},
 	lastLogin: {
 		type: Date,

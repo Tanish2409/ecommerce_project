@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const brandSchema = new mongoose.Schema({
+const categorySchema = new mongoose.Schema({
 	name: {
 		type: String,
 		required: true,
@@ -12,4 +12,4 @@ const brandSchema = new mongoose.Schema({
 	},
 });
 
-module.exports = mongoose.model('Brand', brandSchema);
+module.exports = mongoose.model('Category', categorySchema);
