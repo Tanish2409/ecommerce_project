@@ -186,7 +186,7 @@ router.get('/user/:id', requireSignin, adminMiddleware, async (req, res) => {
 /**
  * METHOD : PATCH
  * ROUTE : /api/user/:id
- * DESC : Admin can update all the user details (name, email, type, bio, image ) but not password or status through this route
+ * DESC : Admin can update all the user details (name, email, type, bio, image ) but not password
  * AUTH : Private - only for admins
  **/
 router.patch(
@@ -244,6 +244,12 @@ router.delete('/user/:id', requireSignin, adminMiddleware, async (req, res) => {
 		if (!user) {
 			return res.status(400).json({
 				error: 'User does not exists',
+			});
+		}
+		//check if the user to be deleted is admin
+		if (user.type === 'admin') {
+			return res.status(400).json({
+				error: 'Action denied. User is also an admin.',
 			});
 		}
 		await User.findByIdAndDelete(userId);
