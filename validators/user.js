@@ -15,7 +15,7 @@ exports.userSignupValidator = [
 		.not()
 		.isEmpty()
 		.withMessage('bio can not be empty'),
-	check('name').trim().not().isEmpty().withMessage('Name is required'),
+	check('type').trim().not().isEmpty().withMessage('Name is required'),
 	check('email').isEmail().withMessage('Must be a valid Email address'),
 	check('password')
 		.trim()

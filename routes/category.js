@@ -22,7 +22,7 @@ const { runValidation } = require('../validators');
 
 router.get('/categories', requireSignin, vendorMiddleware, async (req, res) => {
 	try {
-		let categories = await Category.find({});
+		let categories = await Category.find({ status: 'active' });
 
 		return res.json({ categories });
 	} catch (error) {

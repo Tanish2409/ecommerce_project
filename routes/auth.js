@@ -14,7 +14,7 @@ router.get('/auth', requireSignin, authMiddleware, async (req, res) => {
 	const { userId } = req.user;
 
 	try {
-		const user = await User.findById(userId);
+		const user = await User.findById(userId).select('-password');
 
 		if (!user) {
 			return res.status(400).json({

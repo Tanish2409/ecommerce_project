@@ -21,7 +21,7 @@ const { runValidation } = require('../validators/');
  */
 
 router.post('/signup', userSignupValidator, runValidation, async (req, res) => {
-	const { name, email, bio, status, password } = req.body;
+	const { name, email, bio, status, password, type } = req.body;
 
 	try {
 		//check if user already exists
@@ -39,6 +39,7 @@ router.post('/signup', userSignupValidator, runValidation, async (req, res) => {
 			email,
 			bio,
 			status,
+			type,
 			password: hashPassword,
 			lastLogin: Date.now(),
 		});
@@ -92,7 +93,7 @@ router.post('/login', userSigninValidator, runValidation, async (req, res) => {
 		//generate token and send it
 		const token = await jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
 
-		return res.status(400).json({ token });
+		return res.json({ token });
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({

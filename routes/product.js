@@ -29,13 +29,19 @@ router.get('/products', requireSignin, authMiddleware, async (req, res) => {
 		//check if the user is vender
 		//and if user is vendor then send only products created by him
 		if (user.type === 'vendor') {
-			let products = await Product.find({ postedBy: userId });
+			let products = await Product.find({ postedBy: userId, status: 'active' })
+				.populate('brand')
+				.populate('category')
+				.exec();
 
 			return res.json({ products });
 		}
 
 		//otherwise if user is admin or normal user, then send all the products
-		let products = await Product.find({});
+		let products = await Product.find({ status: 'active' })
+			.populate('brand')
+			.populate('category')
+			.exec();
 		return res.json({ products });
 	} catch (error) {
 		console.error(error);
@@ -58,7 +64,10 @@ router.get('/product/:id', requireSignin, authMiddleware, async (req, res) => {
 
 	try {
 		let user = await User.findById(userId);
-		let product = await Product.findById(productId);
+		let product = await Product.find({ _id: productId, status: 'active' })
+			.populate('brand')
+			.populate('category')
+			.exec();
 
 		//check if product exists
 		if (!product) {
@@ -69,7 +78,10 @@ router.get('/product/:id', requireSignin, authMiddleware, async (req, res) => {
 		//and if user is vendor then only send the queried product details created by same vendor
 		if (user.type === 'vendor') {
 			//check if product exists posted by same vendor
-			product = await Product.findOne({ postedBy: userId });
+			product = await Product.findOne({ postedBy: userId, status: 'active' })
+				.populate('brand')
+				.populate('category')
+				.exec();
 			if (product) {
 				return res.json({ product });
 			}
