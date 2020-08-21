@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SimpleBackdrop() {
-	const [auth, setAuth] = useContext(AuthContext);
+	const { auth } = useContext(AuthContext);
 	const classes = useStyles();
 
 	return (

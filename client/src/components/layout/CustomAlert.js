@@ -6,27 +6,19 @@ function Alert(props) {
 	return <MuiAlert elevation={6} variant='filled' {...props} />;
 }
 
-export default function CustomizedSnackbars({ initialState, setError, type }) {
+export default function CustomizedSnackbars({ open, removeError, type, msg }) {
 	const handleClose = (event, reason) => {
 		if (reason === 'clickaway') {
 			return;
 		}
 
-		setError({
-			...initialState,
-			isError: false,
-			errorMessage: '',
-		});
+		removeError();
 	};
 
 	return (
-		<Snackbar
-			open={initialState.isError}
-			autoHideDuration={6000}
-			onClose={handleClose}
-		>
+		<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
 			<Alert onClose={handleClose} severity={type}>
-				{initialState.errorMessage}
+				{msg}
 			</Alert>
 		</Snackbar>
 	);

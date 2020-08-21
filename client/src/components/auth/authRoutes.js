@@ -4,7 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext';
 
 export const UserProtectedRoute = ({ component: Component, ...rest }) => {
-	const [auth] = useContext(AuthContext);
+	const { auth } = useContext(AuthContext);
 	return (
 		<Route
 			{...rest}
@@ -19,7 +19,7 @@ export const UserProtectedRoute = ({ component: Component, ...rest }) => {
 	);
 };
 export const VendorProtectedRoute = ({ component: Component, ...rest }) => {
-	const [auth] = useContext(AuthContext);
+	const { auth } = useContext(AuthContext);
 	return (
 		<Route
 			{...rest}
@@ -34,7 +34,7 @@ export const VendorProtectedRoute = ({ component: Component, ...rest }) => {
 	);
 };
 export const AdminProtectedRoute = ({ component: Component, ...rest }) => {
-	const [auth] = useContext(AuthContext);
+	const { auth } = useContext(AuthContext);
 	return (
 		<Route
 			{...rest}
@@ -50,7 +50,7 @@ export const AdminProtectedRoute = ({ component: Component, ...rest }) => {
 };
 
 export const ProtectedRoute = ({ component: Component, ...rest }) => {
-	const [auth] = useContext(AuthContext);
+	const { auth } = useContext(AuthContext);
 	return (
 		<Route
 			{...rest}

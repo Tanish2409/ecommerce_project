@@ -1,16 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 //MUI
-import {
-	TextField,
-	Typography,
-	Box,
-	Button,
-	MenuItem,
-} from '@material-ui/core';
+import { TextField, Typography, Box, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import CustomAlert from '../layout/CustomAlert';
 // local imports
-import { login } from '../../utils/auth';
 import { AuthContext } from '../../context/authContext';
 import { Redirect } from 'react-router-dom';
 
@@ -40,7 +33,7 @@ const useStyles = makeStyles(() => ({
 const Login = () => {
 	const classes = useStyles();
 
-	const [auth, setAuth] = useContext(AuthContext);
+	const { login, removeAuthError, auth } = useContext(AuthContext);
 
 	const [form, setForm] = useState({
 		email: '',
@@ -56,15 +49,11 @@ const Login = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		login(form, auth, setAuth);
+		login(form);
 	};
 
 	useEffect(() => {
-		setAuth({
-			...auth,
-			isError: false,
-			errorMessage: '',
-		});
+		removeAuthError();
 	}, []);
 
 	return (
@@ -76,7 +65,12 @@ const Login = () => {
 					<Typography variant='h2' align='center'>
 						Login
 					</Typography>
-					<CustomAlert initialState={auth} setError={setAuth} type='error' />
+					<CustomAlert
+						open={auth.isError}
+						removeError={removeAuthError}
+						type='error'
+						msg={auth.errorMessage}
+					/>
 					<form
 						className={classes.form}
 						onSubmit={handleSubmit}

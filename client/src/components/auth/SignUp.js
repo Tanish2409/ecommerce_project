@@ -40,7 +40,9 @@ const useStyles = makeStyles(() => ({
 const SignUp = () => {
 	const classes = useStyles();
 
-	const [auth, setAuth] = useContext(AuthContext);
+	const { auth, signup, removeAuthError, raiseAuthError } = useContext(
+		AuthContext
+	);
 
 	const [form, setForm] = useState({
 		name: '',
@@ -57,17 +59,13 @@ const SignUp = () => {
 		});
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		signup(form, auth, setAuth);
+		await signup(form);
 	};
 
 	useEffect(() => {
-		setAuth({
-			...auth,
-			isError: false,
-			errorMessage: '',
-		});
+		removeAuthError();
 	}, []);
 
 	return (
@@ -79,7 +77,12 @@ const SignUp = () => {
 					<Typography variant='h2' align='center'>
 						Sign Up
 					</Typography>
-					<CustomAlert initialState={auth} setError={setAuth} type='error' />
+					<CustomAlert
+						open={auth.isError}
+						removeError={removeAuthError}
+						type='error'
+						msg={auth.errorMessage}
+					/>
 					<form
 						className={classes.form}
 						onSubmit={handleSubmit}

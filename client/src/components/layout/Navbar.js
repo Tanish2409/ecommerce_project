@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 //local
-import { logout } from '../../utils/auth';
 import { AuthContext } from '../../context/authContext';
 
 const useStyles = makeStyles((theme) => ({
@@ -25,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = () => {
 	const classes = useStyles();
-	const [auth, setAuth] = useContext(AuthContext);
+	const { auth, logout } = useContext(AuthContext);
 
 	return (
 		<div className={classes.root}>
@@ -48,13 +47,13 @@ const Navbar = () => {
 						<>
 							<Link to='/dashboard'>
 								<Button color='inherit'>
-									{auth.user.name.split(' ')[0]}'s Dashboard
+									{auth.user?.name.split(' ')[0]}'s Dashboard
 								</Button>
 							</Link>
 							<Button
 								color='inherit'
 								onClick={() => {
-									logout(auth, setAuth);
+									logout();
 								}}
 							>
 								Logout

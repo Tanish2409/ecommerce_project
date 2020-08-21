@@ -6,7 +6,7 @@ import VendorDashboard from '../pages/VendorDashboard';
 
 import { AuthContext } from '../../context/authContext';
 const Dashboard = () => {
-	const [auth, setAuth] = useContext(AuthContext);
+	const { auth } = useContext(AuthContext);
 	return (
 		<>
 			{auth.user?.type === 'user' ? (

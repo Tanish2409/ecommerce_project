@@ -7,7 +7,7 @@ import { Typography, Box } from '@material-ui/core';
 import { AuthContext } from '../context/authContext';
 
 const Home = () => {
-	const [auth, setAuth] = useContext(AuthContext);
+	const { auth } = useContext(AuthContext);
 	return (
 		<>
 			{auth.isAuthenticated ? (

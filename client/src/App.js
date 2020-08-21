@@ -18,9 +18,9 @@ import Products from './components/Products';
 import ProductInfo from './components/pages/ProductInfo';
 
 const App = () => {
-	const [auth, setAuth] = useContext(AuthContext);
+	const { loadUser } = useContext(AuthContext);
 	useEffect(() => {
-		loadUser(auth, setAuth);
+		loadUser();
 	}, []);
 	return (
 		<Router>
