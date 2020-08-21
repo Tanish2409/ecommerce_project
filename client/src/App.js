@@ -17,6 +17,7 @@ import Dashboard from './components/layout/Dashboard';
 import Products from './components/Products';
 import ProductInfo from './components/pages/ProductInfo';
 import ProductEdit from './components/pages/ProductEdit';
+import ProductCreate from './components/pages/ProductCreate';
 
 const App = () => {
 	const { loadUser } = useContext(AuthContext);
@@ -37,10 +38,15 @@ const App = () => {
 					path='/view/product/:id'
 					component={ProductInfo}
 				/>
-				<ProtectedRoute
+				<AdminProtectedRoute
 					exact
 					path='/edit/product/:id'
 					component={ProductEdit}
+				/>
+				<AdminProtectedRoute
+					exact
+					path='/create/product'
+					component={ProductCreate}
 				/>
 				<Route
 					exact

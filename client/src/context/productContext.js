@@ -10,6 +10,9 @@ export const ProductProvider = ({ children }) => {
 		name: '',
 		brand: {},
 		category: {},
+		price: 0,
+		quantity: 0,
+		status: '',
 	});
 
 	const getAllProducts = async () => {
@@ -40,6 +43,19 @@ export const ProductProvider = ({ children }) => {
 		}
 	};
 
+	const createProduct = async (data) => {
+		try {
+			const response = await Axios.post(`/product`, data);
+			alert(response.data.message);
+		} catch (error) {
+			if (error.response) {
+				alert(error.response.data.error);
+			} else {
+				console.log(error);
+				alert('Something went wrong');
+			}
+		}
+	};
 	const deleteProduct = async (productId) => {
 		try {
 			const response = await Axios.delete(`/product/${productId}`);
@@ -77,6 +93,7 @@ export const ProductProvider = ({ children }) => {
 				updateProduct,
 				deleteProduct,
 				getProduct,
+				createProduct,
 			}}
 		>
 			{children}

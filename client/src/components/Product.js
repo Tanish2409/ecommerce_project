@@ -33,6 +33,12 @@ const Product = ({ product, history = undefined }) => {
 				<Typography varriant='body1' gutterBottom={true}>
 					Category: {product?.category?.name}
 				</Typography>
+				<Typography varriant='body1' gutterBottom={true}>
+					Price: {product?.price}
+				</Typography>
+				<Typography varriant='body1' gutterBottom={true}>
+					Quantity: {product?.quantity}
+				</Typography>
 				{history ? (
 					<Button
 						variant='outlined'

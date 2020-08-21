@@ -5,7 +5,7 @@ import { Box } from '@material-ui/core';
 import Product from '../Product';
 import { ProductContext, ProductProvider } from '../../context/productContext';
 
-const ProductConsumer = ({ match }) => {
+const ProductConsumer = ({ match, history }) => {
 	const { product, getProduct } = useContext(ProductContext);
 
 	useEffect(() => {
@@ -19,9 +19,13 @@ const ProductConsumer = ({ match }) => {
 			justifyContent='center'
 			alignItems='center'
 			width='100vw'
-			height='50vh'
+			height='calc(100vh - 64px)'
 		>
-			{product ? <Product product={product} /> : <h5>Loading...</h5>}
+			{product ? (
+				<Product product={product} history={history} />
+			) : (
+				<h5>Loading...</h5>
+			)}
 		</Box>
 	);
 };
