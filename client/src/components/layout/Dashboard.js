@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 //local
-import AdminDashboard from './AdminDashboard';
-import UserDashboard from './UserDashboard';
-import VendorDashboard from './VendorDashboard';
+import AdminDashboard from '../pages/AdminDashboard';
+import UserDashboard from '../pages/UserDashboard';
+import VendorDashboard from '../pages/VendorDashboard';
 
 import { AuthContext } from '../../context/authContext';
 const Dashboard = () => {

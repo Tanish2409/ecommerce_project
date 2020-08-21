@@ -15,7 +15,7 @@ import {
 } from './components/auth/authRoutes';
 import Dashboard from './components/layout/Dashboard';
 import Products from './components/Products';
-import ProductInfo from './components/ProductInfo';
+import ProductInfo from './components/pages/ProductInfo';
 
 const App = () => {
 	const [auth, setAuth] = useContext(AuthContext);
@@ -30,18 +30,18 @@ const App = () => {
 				<Route exact path='/signup' component={SignUp} />
 				<Route exact path='/login' component={Login} />
 				<ProtectedRoute exact path='/dashboard' component={Dashboard} />
+				<ProtectedRoute exact path='/view/products' component={Products} />
+				<ProtectedRoute
+					exact
+					path='/view/product/:id'
+					component={ProductInfo}
+				/>
 				<Route
 					exact
 					path='/unauthorised'
 					render={() => (
 						<h3>Unauthorised. Please login with proper credentials.</h3>
 					)}
-				/>
-				<ProtectedRoute exact path='/view/products' component={Products} />
-				<ProtectedRoute
-					exact
-					path='/view/product/:id'
-					component={ProductInfo}
 				/>
 				<Route path='*' render={() => <h1>404 Not Found</h1>} />
 			</Switch>

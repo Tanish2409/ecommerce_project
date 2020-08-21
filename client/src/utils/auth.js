@@ -26,6 +26,10 @@ export const setAuthToken = () => {
 export const loadUser = async (auth, setAuth) => {
 	const token = setAuthToken();
 	try {
+		setAuth({
+			...auth,
+			isLoading: true,
+		});
 		let response = await axios.get('/auth');
 
 		const { user } = response.data;

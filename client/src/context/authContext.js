@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
 		token: null,
 		user: null,
 		isAuthenticated: false,
-		loading: false,
+		isLoading: true,
 		isError: false,
 		errorMessage: '',
 	});
