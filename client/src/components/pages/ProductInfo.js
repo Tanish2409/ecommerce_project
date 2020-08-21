@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 //MUI
 import { Box } from '@material-ui/core';
 //local
-import { getProduct } from '../../utils/product';
 import Product from '../Product';
+import { ProductContext, ProductProvider } from '../../context/productContext';
 
-const ProductInfo = ({ match }) => {
-	const [product, setProduct] = useState(null);
+const ProductConsumer = ({ match }) => {
+	const { product, getProduct } = useContext(ProductContext);
 
 	useEffect(() => {
-		getProduct(setProduct, match.params.id);
+		getProduct(match.params.id);
 	}, []);
 
 	return (
@@ -23,6 +23,14 @@ const ProductInfo = ({ match }) => {
 		>
 			{product ? <Product product={product} /> : <h5>Loading...</h5>}
 		</Box>
+	);
+};
+
+const ProductInfo = (props) => {
+	return (
+		<ProductProvider>
+			<ProductConsumer {...props} />
+		</ProductProvider>
 	);
 };
 

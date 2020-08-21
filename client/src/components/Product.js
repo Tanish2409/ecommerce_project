@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 //mui
 import { Paper, Box, Typography, Avatar, Button } from '@material-ui/core';
+import { ProductContext } from '../context/productContext';
 
 const Product = ({ product, history = undefined }) => {
+	const { deleteProduct } = useContext(ProductContext);
 	return (
 		<Paper
 			elevation={2}
@@ -48,10 +50,18 @@ const Product = ({ product, history = undefined }) => {
 					color='primary'
 					fullWidth={true}
 					style={{ marginBottom: '1rem' }}
+					onClick={() => history.push(`/edit/product/${product?._id}`)}
 				>
 					Edit
 				</Button>
-				<Button variant='outlined' color='secondary' fullWidth={true}>
+				<Button
+					variant='outlined'
+					color='secondary'
+					fullWidth={true}
+					onClick={() => {
+						deleteProduct(product?._id);
+					}}
+				>
 					Delete
 				</Button>
 			</Box>

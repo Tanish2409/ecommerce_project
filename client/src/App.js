@@ -16,6 +16,7 @@ import {
 import Dashboard from './components/layout/Dashboard';
 import Products from './components/Products';
 import ProductInfo from './components/pages/ProductInfo';
+import ProductEdit from './components/pages/ProductEdit';
 
 const App = () => {
 	const { loadUser } = useContext(AuthContext);
@@ -35,6 +36,11 @@ const App = () => {
 					exact
 					path='/view/product/:id'
 					component={ProductInfo}
+				/>
+				<ProtectedRoute
+					exact
+					path='/edit/product/:id'
+					component={ProductEdit}
 				/>
 				<Route
 					exact

@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 //Mui
 import { Box, Typography } from '@material-ui/core';
 //local
-import { getAllProducts } from '../utils/product';
+import { ProductContext, ProductProvider } from '../context/productContext';
 import Product from './Product';
 
-const Products = ({ history }) => {
-	const [products, setProducts] = useState([]);
+const ProductConsumer = ({ history }) => {
+	const { products, getAllProducts } = useContext(ProductContext);
 
 	useEffect(() => {
-		getAllProducts(setProducts);
+		getAllProducts();
 	}, []);
 	return (
 		<>
@@ -41,5 +41,13 @@ const Products = ({ history }) => {
 		</>
 	);
 };
+
+function Products(props) {
+	return (
+		<ProductProvider>
+			<ProductConsumer {...props} />
+		</ProductProvider>
+	);
+}
 
 export default Products;
